@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.js"></script>
+</head>
+<script>
+    $(function () {
+        var list = ['a', 'b', 'c'];
+
+        function render(data) {
+            $('#ul').empty();
+            $.each(data, function (i, v) {
+                $(`
+                    <li>${v}
+                        <span class="delete">x</span>
+                    </li>
+                `).appendTo($('#ul'))
+            })
+        }
+
+        render(list);
+
+//        增加
+        $('#button').on('click', function () {
+            var random = String.fromCharCode(Math.floor(Math.random() * 26) + 65)
+            list.push(random);
+            console.log(list);
+            render(list)
+        })
+//        删除
+        $("#ul").on('click', '.delete', function () {
+            var index = $(this).closest('li').index();
+            var del = list.splice(index, 1);
+            console.log(list);
+            render(list);
+        })
+//        搜索
+        $('#input').on('keyup', function () {
+            var val = $(this).val();
+            console.log(val);
+            if (val === '') {
+                render(list);
+                return;
+            }
+            var newarr = [];
+            $.each(list, function (i, v) {
+                if (v <= val) {
+                    console.log(val, v);
+                    newarr.push(v);
+                    render(newarr)
+                }
+            })
+        })
+    })
+</script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+</style>
+<body>
+<input type="text" id="input">
+<ul id="ul">
+
+</ul>
+<button type="button" id="button">+</button>
+</body>
+</html>
